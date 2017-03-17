@@ -8,7 +8,6 @@
 
 namespace Tests;
 
-use CasaParks\ExtractTranslations\Service;
 use Mockery;
 use PHPUnit_Framework_TestCase;
 

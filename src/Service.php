@@ -64,9 +64,9 @@ class Service implements Arrayable, Jsonable, JsonSerializable
      * Extract translations from the loader.
      *
      * @param \Illuminate\Translation\LoaderInterface $loader
-     * @param array  $locales
-     * @param string $fallback
-     * @param array  $groups
+     * @param array                                   $locales
+     * @param string                                  $fallback
+     * @param array                                   $groups
      *
      * @return array
      */
