@@ -162,6 +162,8 @@ class TranslationController extends Controller
     /**
      * Get the available translations.
      *
+     * @param \CasaParks\ExtractTranslations\Builder $builder
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function list(Builder $builder)
@@ -203,6 +205,9 @@ class TranslationController extends Controller
     /**
      * Get the available translations.
      *
+     * @param string                                 $translation
+     * @param \CasaParks\ExtractTranslations\Builder $builder
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function get($translation, Builder $builder)
@@ -217,7 +222,7 @@ class TranslationController extends Controller
 }
 ```
 
-```
+```php
 $router->get('/api/translations/{translation}', [
     'as' => 'get::api.translation',
     'uses' => 'Api\TranslationController@get',
