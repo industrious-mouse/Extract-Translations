@@ -40,17 +40,17 @@ Create a simple view composer, like so:
 
 namespace App\Composers;
 
-use CasaParks\ExtractTranslations\Service as TranslationsExtractor;
+use CasaParks\ExtractTranslations\Builder as TranslationsExtractorBuilder;
 use Illuminate\Contracts\View\View;
 
 class TranslationsComposer
 {
     /**
-     * The translations extractor.
+     * The translations extractor builder.
      *
-     * @var \CasaParks\ExtractTranslations\Service
+     * @var \CasaParks\ExtractTranslations\Builder
      */
-    protected $extractor;
+    protected $builder;
 
     /**
      * Whether the data is cached or not.
@@ -69,11 +69,11 @@ class TranslationsComposer
     /**
      * Creates a new translations composer.
      *
-     * @param \CasaParks\ExtractTranslations\Service $extractor
+     * @param \CasaParks\ExtractTranslations\Builder $builder
      */
-    public function __construct(TranslationsExtractor $extractor)
+    public function __construct(TranslationsExtractorBuilder $builder)
     {
-        $this->extractor = $extractor;
+        $this->builder = $builder;
     }
 
     /**
@@ -101,8 +101,10 @@ class TranslationsComposer
     {
         $this->cached = true;
 
-        // We don't want to include any admin / api translations.
-        $translations = $this->extractor->filterOnly('middleware', 'guest', 'auth');
+        $translations = $this->builder
+            ->locales('en', 'de')
+            ->groups('pagination', 'validation')
+            ->service();
 
         $this->data = compact('translations');
     }
