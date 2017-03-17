@@ -145,3 +145,88 @@ In your common `layout` template file:
 ```
 
 Then utilise as required in your JavaScript.
+
+### Advanced Usage
+
+Personally, I wouldn't want all of this work to occur on every page load. What I would do is have a translation api (we know that if the translations are going to be used on the front end then the user definitely has JavaScript enabled anyway, right?).
+
+I'd have a simple API controller, like so:
+
+```php
+namespace App\Http\Controllers\Api;
+
+use CasaParks\ExtractTranslations\Builder;
+
+class TranslationController extends Controller
+{
+    /**
+     * Get the available translations.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function list(Builder $builder)
+    {
+        return $builder->locales('en', 'de')
+            ->groups('pagination', 'validation')
+            ->service();
+    }
+}
+```
+
+A simple API route (in `routes/api.php` or your equivalent):
+
+```php
+$router->get('/api/translations', [
+    'as' => 'get::api.translations',
+    'uses' => 'Api\TranslationController@list',
+]);
+```
+
+Then in your front end (IE, with axios):
+
+```js
+window.axios.get('/api/translations')
+    .then(translations => window.translations = translations);
+```
+
+### Bonus Usage
+
+You can even do this on a per-language basis, as a hot-swap, something like:
+
+```php
+namespace App\Http\Controllers\Api;
+
+use CasaParks\ExtractTranslations\Builder;
+
+class TranslationController extends Controller
+{
+    /**
+     * Get the available translations.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function get($translation, Builder $builder)
+    {
+        $translations = $builder->locales($translation)
+            ->groups('pagination', 'validation')
+            ->service()
+            ->toArray();
+
+        return array_get($translations, $translation, []);
+    }
+}
+```
+
+```
+$router->get('/api/translations/{translation}', [
+    'as' => 'get::api.translation',
+    'uses' => 'Api\TranslationController@get',
+]);
+```
+
+```js
+function translate(translation) {
+    window.axios.get(`/api/translations/${translation}`)
+        .then(translations => window.translations = translations);
+}
+```
