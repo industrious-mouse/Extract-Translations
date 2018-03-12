@@ -10,7 +10,7 @@ namespace CasaParks\ExtractTranslations;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Translation\LoaderInterface as TranslationLoader;
+use Illuminate\Contracts\Translation\Loader as TranslationLoader;
 use Illuminate\Translation\Translator;
 use JsonSerializable;
 
